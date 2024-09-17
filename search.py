@@ -112,10 +112,34 @@ def breadthFirstSearch(problem):
 
 def uniformCostSearch(problem):
     """
-    Search the node of least total cost first.
+    Search the node of least total cost first using Uniform Cost Search (UCS).
     """
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    startingNode = problem.getStartState() #Get the starting node (initial state)
+
+    visited = set() #Initialize a set to keep track of visited nodes (already explored states)
+
+    action_list = [] #Initialize an empty action list to track actions taken to reach a node
+
+    queue = util.PriorityQueue()  #Initialize a priority queue to prioritize nodes with the least total cost
+
+    queue.push((startingNode, action_list, 0), 0) #Push the starting node into the queue with its current cost set to 0
+    #Each item in the queue is a tuple (node, actions, cost), and the priority is the cost
+
+    while queue:  #Continue searching while there are nodes in the queue
+        node, actions, prevCost = queue.pop() #Pop the node with the lowest cost from the priority queue
+
+        if node not in visited: #If the node has not been visited, mark it as visited
+            visited.add(node) #Add to visited set
+
+            if problem.isGoalState(node): #If the node is the goal state, return the list of actions leading to this node
+                return actions
+
+            for nextNode, action, cost in problem.getSuccessors(node): #Explore all successors (children) of the current node
+                newAction = actions + [action] #Create a new action list by appending the current action
+                priority = prevCost + cost #Total cost to reach the next node
+                queue.push((nextNode, newAction, priority), priority) #Push the successor node into the queue with its new cost as the priority
+
+    util.raiseNotDefined() #If the goal state is not found, raise an error (this should not be reached)
 
 
 def nullHeuristic(state, problem=None):
