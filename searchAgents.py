@@ -314,6 +314,7 @@ class CornersProblem(search.SearchProblem):
         self.cornerList = [] #Tracks visited corners
         self.startState = (self.startingPosition, self.cornerList) #Starting state is Pacman's initial position with no corners visited
         
+
     def getStartState(self):
         "Returns the start state (in your state space, not the full Pacman state space)"
         "*** YOUR CODE HERE ***"
@@ -357,7 +358,7 @@ class CornersProblem(search.SearchProblem):
             "*** YOUR CODE HERE ***"  
             if not hitsWall: #If the move does not hit a wall, create the successor state
                 successorVisitedCorners = list(visitedCorners) #Copy the visited corners list
-                next = (nextx, nexty)  #Get the new position (next node)
+                next = (nextx, nexty)  #Get the new position(next node)
                 if next in self.corners: #If the new position is a corner and it hasn't been visited, mark it as visited
                     if next not in successorVisitedCorners:
                         successorVisitedCorners.append(next)
