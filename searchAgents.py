@@ -311,7 +311,7 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
-        self.cornerList = [] #Tracks visited corners
+        self.cornerList = set() #Tracks visited corners
         self.startState = (self.startingPosition, self.cornerList) #Starting state is Pacman's initial position with no corners visited
         
 
@@ -324,13 +324,13 @@ class CornersProblem(search.SearchProblem):
     def isGoalState(self, state):
         "Returns whether this search state is a goal state of the problem"
         "*** YOUR CODE HERE ***"
-        node = state[0] #The current position and list of visited corners from the state
-        visitedCorners = state[1]
+        node = state[0] #The current position from the state
+        visited = state[1] #The list of visited corners from the state
 
-        if node in self.corners: #If Pacman is in a corner that hasn't been visited, mark it as visited
-            if not node in visitedCorners:
-                visitedCorners.append(node)
-            return len(visitedCorners) == 4 #If all 4 corners are visited, the goal is reached
+        if node in self.corners: #If node is in a corner that hasn't been visited, mark it as visited
+            if not node in visited:
+                visited.append(node)
+            return len(visited) == 4 #If all 4 corners are visited, the goal is reached
         return False #Goal not yet reached
         util.raiseNotDefined()
 
@@ -357,12 +357,12 @@ class CornersProblem(search.SearchProblem):
 
             "*** YOUR CODE HERE ***"  
             if not hitsWall: #If the move does not hit a wall, create the successor state
-                successorVisitedCorners = list(visitedCorners) #Copy the visited corners list
-                next = (nextx, nexty)  #Get the new position(next node)
+                successorVisited = set(visitedCorners) #Copy the visited corners list
+                next = (nextx, nexty)  #Get the new position (next node)
                 if next in self.corners: #If the new position is a corner and it hasn't been visited, mark it as visited
-                    if next not in successorVisitedCorners:
-                        successorVisitedCorners.append(next)
-                successor = ((next, successorVisitedCorners), action, 1) #Create a successor state: (new position, updated visited corners), action, and a step cost of 1
+                    if next not in successorVisited:
+                        successorVisited.add(next)
+                successor = ((next, successorVisited), action, 1) #Create a successor state: (new position, updated visited corners), action, and a step cost of 1
                 successors.append(successor) #Add the successor state to the list of successors
         self._expanded += 1
         return successors
