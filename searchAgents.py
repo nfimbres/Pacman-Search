@@ -311,15 +311,26 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
-
+        self.cornerList = [] #Tracks visited corners
+        self.startState = (self.startingPosition, self.cornerList) #Starting state is Pacman's initial position with no corners visited
+        
     def getStartState(self):
         "Returns the start state (in your state space, not the full Pacman state space)"
         "*** YOUR CODE HERE ***"
+        return self.startState #Return the starting state
         util.raiseNotDefined()
 
     def isGoalState(self, state):
         "Returns whether this search state is a goal state of the problem"
         "*** YOUR CODE HERE ***"
+        node = state[0] #The current position and list of visited corners from the state
+        visitedCorners = state[1]
+
+        if node in self.corners: #If Pacman is in a corner that hasn't been visited, mark it as visited
+            if not node in visitedCorners:
+                visitedCorners.append(node)
+            return len(visitedCorners) == 4 #If all 4 corners are visited, the goal is reached
+        return False #Goal not yet reached
         util.raiseNotDefined()
 
     def getSuccessors(self, state):
@@ -333,18 +344,25 @@ class CornersProblem(search.SearchProblem):
          required to get there, and 'stepCost' is the incremental
          cost of expanding to that successor
         """
-
-        successors = []
+        successors = [] #List to store successor states
         for action in [Directions.EAST, Directions.WEST, Directions.NORTH, Directions.SOUTH]:
             # Add a successor state to the successor list if the action is legal
             # Here's a code snippet for figuring out whether a new position hits a wall:
-            #   x,y = currentPosition
-            #   dx, dy = Actions.directionToVector(action)
-            #   nextx, nexty = int(x + dx), int(y + dy)
-            #   hitsWall = self.walls[nextx][nexty]
+            x,y = state[0] #The current position from the state
+            visitedCorners = state[1] #The list of visited corners from the state
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            hitsWall = self.walls[nextx][nexty]
 
-            "*** YOUR CODE HERE ***"
-
+            "*** YOUR CODE HERE ***"  
+            if not hitsWall: #If the move does not hit a wall, create the successor state
+                successorVisitedCorners = list(visitedCorners) #Copy the visited corners list
+                next = (nextx, nexty)  #Get the new position (next node)
+                if next in self.corners: #If the new position is a corner and it hasn't been visited, mark it as visited
+                    if next not in successorVisitedCorners:
+                        successorVisitedCorners.append(next)
+                successor = ((next, successorVisitedCorners), action, 1) #Create a successor state: (new position, updated visited corners), action, and a step cost of 1
+                successors.append(successor) #Add the successor state to the list of successors
         self._expanded += 1
         return successors
 
