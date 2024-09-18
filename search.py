@@ -189,8 +189,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
                 
                 coordinate, direction, cost = successor
                 nextActions = actions + [direction]
-                nextCost = problem.getCostOfActions(nextActions) + \
-                               heuristic(coordinate, problem)
+                nextCost = problem.getCostOfActions(nextActions) + heuristic(coordinate, problem)
                 queue.push((coordinate, nextActions), nextCost)
                 
     return []
