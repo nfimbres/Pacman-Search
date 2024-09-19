@@ -103,14 +103,14 @@ def depthFirstSearch(problem):
     
     
 def breadthFirstSearch(problem):
-    stack = util.Queue()
+    queue = util.Queue()
     visited = []
     action_list = []
-    stack.push((problem.getStartState(), action_list))
+    queue.push((problem.getStartState(), action_list))
     
-    while stack:
+    while queue:
         
-        node, actions = stack.pop()
+        node, actions = queue.pop()
         
         if not node in visited:
             
@@ -122,7 +122,7 @@ def breadthFirstSearch(problem):
             for s in problem.getSuccessors(node):
                 coordinate, direction, cost = s
                 nextActions = actions + [direction]
-                stack.push((coordinate, nextActions))
+                queue.push((coordinate, nextActions))
                 
     return []
 
