@@ -557,6 +557,12 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
+        return search.bfs(problem) #Use BFS to find the shortest path to the closest dot
+    #Path to the closest dot in an unweighted grid. BFS explores all possible paths in 
+    #increasing order of distance, ensuring that the first time we find a dot, it is via 
+    #the shortest path. This works well in Pac-Man's environment, where each move has 
+    #the same cost (unweighted), and BFS is efficient enough for this scenario. It will efficiently
+    #find the closest dot from the current position.
         util.raiseNotDefined()
 
 
@@ -594,6 +600,21 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x, y = state
 
         "*** YOUR CODE HERE ***"
+    # The state is Pacman's position in the maze.
+    
+    #Goal Test: The goal of this problem is for Pacman to reach a position
+    #that contains a dot (food). Therefore, this function checks if Pacman's 
+    #current position matches the position of any food dot in the grid.
+    
+    #We achieve this by converting the food grid into a list of coordinates
+    #representing the locations of all food dots using self.food.asList().
+    #If Pacman's current position (x, y) is in this list, then we've reached
+    #a goal state and return True.
+    
+    #This simple goal test works effectively because Pacman's objective is
+    #to consume all the dots, and the first dot found is treated as the goal.
+    
+        return (x, y) in self.food.asList() #Goal state is reached if Pacman is in the same position as a piece of food
         util.raiseNotDefined()
 
 
