@@ -41,6 +41,7 @@ from game import Actions
 import util
 import time
 import search
+import random
 
 
 class GoWestAgent(Agent):
@@ -632,6 +633,8 @@ class ApproximateSearchAgent(Agent):
         This method is called before any moves are made.
         """
         "*** YOUR CODE HERE ***"
+        self.choices = state.getLegalPacmanActions()
+        print(state.getWalls())
 
     def getAction(self, state):
         """
@@ -640,8 +643,30 @@ class ApproximateSearchAgent(Agent):
         Directions.{North, South, East, West, Stop}
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        
+    def search(self, state, start, targets):
+        
+        distances = {start: 0}
+        
+        walls = state.getWalls()
+        
+        width, height = walls.width, walls.height
+        
+        print(walls)
+        
+        return distances
 
+    def getNeighbors(self, pos, walls):
+        x, y = pos
+        neighbors = []
+        
+        for dx, dy in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
+            nx, ny = x + dx, y + dy
+            
+            if 0 <= nx < walls.width and 0 <= ny < walls.height and not walls[nx][ny]:
+                neighbors.append((nx, ny))
+                
+        return neighbors    
 
 def mazeDistance(point1, point2, gameState):
     """
