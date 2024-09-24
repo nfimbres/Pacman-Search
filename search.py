@@ -77,55 +77,68 @@ def tinyMazeSearch(problem):
 
 
 def depthFirstSearch(problem):
+    stack = util.Stack() #Initialize a stack to manage nodes in LIFO order for DFS
+    visited = [] #List to track visited nodes to prevent cycles
+    action_list = [] #List to store the sequence of actions to reach a goal
+    stack.push((problem.getStartState(), action_list)) #Push the start state along with the initial action list to the stack
     
-    stack = util.Stack()
-    visited = []
-    action_list = []
-    stack.push((problem.getStartState(), action_list))
-    
+    #Continue while there are nodes to explore in the stack
     while stack:
         
+        #Pop the top node from the stack (LIFO)
         node, actions = stack.pop()
         
-        if not node in visited:
+        #If the node has not been visited yet
+        if node not in visited:
             
+            #Mark the node as visited
             visited.append(node)
             
+            #If the node is the goal state, return the list of actions
             if problem.isGoalState(node):
                 return actions
             
+            #Expand the node by getting its successors
             for s in problem.getSuccessors(node):
-                coordinate, direction, cost = s
-                nextActions = actions + [direction]
-                stack.push((coordinate, nextActions))
-                
-    return []
+                coordinate, direction, cost = s #s contains (state, direction, cost)
+                nextActions = actions + [direction] #Create a new action list by adding the current action (direction)
+                stack.push((coordinate, nextActions)) #Push the successor node and its actions to the stack
     
-    
-def breadthFirstSearch(problem):
-    queue = util.Queue()
-    visited = []
-    action_list = []
-    queue.push((problem.getStartState(), action_list))
-    
-    while queue:
-        
-        node, actions = queue.pop()
-        
-        if not node in visited:
-            
-            visited.append(node)
-            
-            if problem.isGoalState(node):
-                return actions
-            
-            for s in problem.getSuccessors(node):
-                coordinate, direction, cost = s
-                nextActions = actions + [direction]
-                queue.push((coordinate, nextActions))
-                
+    #Return an empty list if no solution is found
     return []
 
+
+
+def breadthFirstSearch(problem):
+    queue = util.Queue() #Initialize a queue to manage nodes in FIFO order for BFS
+    visited = [] #List to track visited nodes to prevent revisiting
+    action_list = [] #List to store the sequence of actions to reach a goal
+    queue.push((problem.getStartState(), action_list)) #Push the start state along with the initial action list to the queue
+    
+    #Continue while there are nodes to explore in the queue
+    while queue:
+        
+        #Pop the front node from the queue (FIFO)
+        node, actions = queue.pop()
+        
+        #If the node has not been visited yet
+        if node not in visited:
+            
+            #Mark the node as visited
+            visited.append(node)
+            
+            #If the node is the goal state, return the list of actions
+            if problem.isGoalState(node):
+                return actions
+            
+            # Expand the node by getting its successors
+            for s in problem.getSuccessors(node):
+                coordinate, direction, cost = s #s contains (state, direction, cost)
+                nextActions = actions + [direction] #Create a new action list by adding the current action (direction)
+                queue.push((coordinate, nextActions)) #Push the successor node and its actions to the queue
+    
+    #Return an empty list if no solution is found
+    return []
 
 def uniformCostSearch(problem):
     """
@@ -168,36 +181,36 @@ def nullHeuristic(state, problem=None):
 
 
 def aStarSearch(problem, heuristic=nullHeuristic):
+    queue = util.PriorityQueue() #Initialize a priority queue for A* search
+    visited = [] #List to track visited nodes to prevent revisiting
+    action_list = [] #List to store the sequence of actions to reach a goal
     
-    queue = util.PriorityQueue()
-    visited = []
-    action_list = []
+    #Push the start state along with the initial action list and heuristic value to the queue
     queue.push((problem.getStartState(), action_list), heuristic(problem.getStartState(), problem))
     
+    #Continue while there are nodes to explore in the priority queue
     while queue:
+        node, actions = queue.pop() #Pop the node with the lowest priority (cost + heuristic)
         
-        node, actions = queue.pop()
-        
-        if not node in visited:
+        if node not in visited: #If the node has not been visited yet
+            visited.append(node) #Mark the node as visited
             
-            visited.append(node)
-            
-            if problem.isGoalState(node):
+            if problem.isGoalState(node): #If the node is the goal state, return the list of actions
                 return actions
             
-            for successor in problem.getSuccessors(node):
+            for successor in problem.getSuccessors(node): #Expand the node by getting its successors
                 
-                coordinate, direction, cost = successor
-                nextActions = actions + [direction]
-                nextCost = problem.getCostOfActions(nextActions) + heuristic(coordinate, problem)
+                coordinate, direction, cost = successor #successor contains (state, direction, cost)
+                nextActions = actions + [direction] #Create a new action list by adding the current action (direction)
+                nextCost = problem.getCostOfActions(nextActions) + heuristic(coordinate, problem) #Calculate total cost (path cost + heuristic)
+                
+                #Push the successor node, its actions, and the updated cost to the priority queue
                 queue.push((coordinate, nextActions), nextCost)
-                
+    
+    #Return an empty list if no solution is found
     return []
-    
-    
-    
-    util.raiseNotDefined()
 
+    util.raiseNotDefined()
 
 # Abbreviations
 bfs = breadthFirstSearch
