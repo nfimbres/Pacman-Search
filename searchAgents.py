@@ -410,6 +410,33 @@ def cornersHeuristic(state, problem):
     walls = problem.walls  # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
+        #Find which corners are left to reach GoalState.
+    #Get the list of visited corners from the state
+    visitedCorners = state[1]
+    
+    #Initialize a list to store corners that have not been visited
+    cornersLeftToVisit = []
+    
+    #Loop through all corners and add unvisited corners to the list
+    for corner in corners:
+        if corner not in visitedCorners:
+            cornersLeftToVisit.append(corner)
+
+    #Initialize the total cost (heuristic) and set the starting point to the agent's current location
+    totalCost = 0
+    coordinate = state[0]
+    curPoint = coordinate
+
+    #While there are still corners left to visit, calculate the heuristic cost
+    while cornersLeftToVisit:
+        #Find the corner with the minimum Manhattan distance from the current point
+        heuristic_cost, corner = min([(util.manhattanDistance(curPoint, corner), corner) for corner in cornersLeftToVisit])
+        
+        cornersLeftToVisit.remove(corner)#Remove the selected corner from the list of corners to visit
+        curPoint = corner #Update the current point to the selected corner
+        totalCost += heuristic_cost #Add the Manhattan distance to the total cost
+    
+    return totalCost #Return the total heuristic cost
     return 0  # Default to trivial solution
 
 
