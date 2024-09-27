@@ -550,8 +550,21 @@ def foodHeuristic(state, problem):
     Submissions with mazeDistance will receive a 0 for this question.
     """
     position, foodGrid = state
-    "*** YOUR CODE HERE ***"
-    return 0
+    foodList = foodGrid.asList()  # Get the list of food coordinates
+
+    if not foodList:  # If there is no food left, the heuristic is 0
+        return 0
+
+    # Calculate the maximum Manhattan distance to any food pellet
+    maxDistance = 0
+    for food in foodList:
+        # Perform Manhattan distance formula
+        distance = abs(position[0] - food[0]) + abs(position[1] - food[1])
+        # If the distance is greater than the maxDistance, then update it
+        if distance > maxDistance:
+            maxDistance = distance
+
+    return maxDistance
 
 
 class ClosestDotSearchAgent(SearchAgent):
