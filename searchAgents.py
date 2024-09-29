@@ -674,15 +674,26 @@ class ApproximateSearchAgent(Agent):
         """
         "*** YOUR CODE HERE ***"
         self.choices = state.getLegalPacmanActions()
-        print(state.getWalls())
-
+        
     def getAction(self, state):
         """
         From game.py:
         The Agent will receive a GameState and must return an action from
         Directions.{North, South, East, West, Stop}
         """
-        "*** YOUR CODE HERE ***"
+        print(type(self.choices)
+        # if  > 1:
+        #     self.choice = random.choice(self.choices.remove('Stop'))
+        #     if self.choice == 'North':
+        #         return Directions.NORTH
+        #     elif self.choice == 'South':
+        #         return Directions.SOUTH
+        #     elif self.choice == 'East':
+        #         return Directions.EAST
+        #     elif self.choice == 'West':
+        #         return Directions.WEST
+        # else:
+        return Directions.STOP
         
     def search(self, state, start, targets):
         
